@@ -1,0 +1,91 @@
+{
+  "name": "leasekeeper",
+  "tagline": "The lease broker that stops parallel coding agents from deadlocking.",
+  "architecture": {
+    "title": "One binary, three modes, one broker per run",
+    "nodes": [
+      {
+        "title": "cmd/leasekeeper",
+        "detail": "Single entry point"
+      },
+      {
+        "title": "internal/cli",
+        "detail": "run · acquire · release · status · demo"
+      },
+      {
+        "title": "internal/client",
+        "detail": "Unix-socket RPC"
+      },
+      {
+        "title": "internal/broker",
+        "detail": "Lease table + wait-for graph"
+      },
+      {
+        "title": "internal/lease",
+        "detail": "file · port · gpu · quota"
+      },
+      {
+        "title": "internal/waitgraph",
+        "detail": "Refuses the circular wait"
+      }
+    ],
+    "edges": [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [3, 5]
+    ]
+  },
+  "process": {
+    "title": "What happens on one acquire",
+    "steps": [
+      {
+        "title": "Declare the resource",
+        "detail": "file:src/a.go — the caller names it"
+      },
+      {
+        "title": "Read the lease table",
+        "detail": "Free? Grant it and record the owner"
+      },
+      {
+        "title": "Check the wait-for graph",
+        "detail": "Would waiter -> holder close a cycle?"
+      },
+      {
+        "title": "Grant, queue or refuse",
+        "detail": "b -> a -> b is refused and printed"
+      }
+    ],
+    "result": "A refused acquire fails fast with the cycle named, so neither agent hangs."
+  },
+  "integrations": {
+    "title": "What you can lease, and how it reaches the broker",
+    "items": [
+      {
+        "title": "file:<path>",
+        "detail": "One writer per file"
+      },
+      {
+        "title": "port:<n>",
+        "detail": "One listener per port"
+      },
+      {
+        "title": "gpu:<id>",
+        "detail": "Named, not fenced"
+      },
+      {
+        "title": "quota:<name>",
+        "detail": "Shared API budget"
+      },
+      {
+        "title": "leasekeeper run",
+        "detail": "Wraps any command"
+      },
+      {
+        "title": "Unix socket",
+        "detail": "One broker per run"
+      }
+    ]
+  }
+}

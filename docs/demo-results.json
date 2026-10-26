@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "source_revision": "PENDING",
+  "scope": "The built-in demo: one real broker on a temporary Unix socket, driven over the real client protocol. No second terminal and no configuration. TTL expiry, the `run` wrapper and the two-terminal example are not exercised by this recording.",
+  "steps": [
+    {
+      "label": "Recorded run",
+      "body": "One process, one broker on a temporary socket. Agent a takes the file, agent b takes the port, a's request for the port waits, and b's request for the file is refused because it would close b -> a -> b.",
+      "command": "leasekeeper demo",
+      "output": "Leasekeeper demo — two agents, one resource pair, one refused cycle\nbroker started on a temporary socket; no configuration needed\n\n  [a] acquire file:src/a.go\n     granted  granted file:src/a.go to a\n\n  [b] acquire port:8080\n     granted  granted port:8080 to b\n\n  [a] acquire port:8080   (blocks)\n     waiting  waiting for port:8080 held by b\n\n  [b] acquire file:src/a.go\n     acquire denied  acquire denied — would deadlock: b -> a -> b\n\nLeases\n  RESOURCE       OWNER  HELD  TTL\n  file:src/a.go  a      0s    -\n  port:8080      b      0s    -\n\nWait-for graph\n  a -> b\n\n  [b] release port:8080\n     released  released port:8080\n     granted  granted port:8080 to a after waiting\n\nLeases\n  none held\n\nWait-for graph\n  no agent is waiting on another\n\na held half the pair and b held the other half, so the second acquire was refused\ninstead of hanging. Nothing was preempted: the refusal failed fast, and once b\nreleased the port the queued waiter was served in order."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "mode": "auto",
+  "id": "56e656-6ae7ac-c7f6ac-392c1aef88d4",
+  "identity": "https://github.com/supermarioyl/leasekeeper",
+  "primary": "#56e656",
+  "secondary": "#6ae7ac",
+  "highlight": "#c7f6ac",
+  "dark": {
+    "bg": "#050c0d",
+    "panel": "#0c1717",
+    "code": "#0a1713",
+    "ink": "#f4fdee",
+    "muted": "#95b9a8",
+    "line": "#173c1d",
+    "primary": "#56e656",
+    "secondary": "#6ae7ac",
+    "highlight": "#c7f6ac",
+    "accent": "#56e656",
+    "buttonStart": "#338733",
+    "buttonEnd": "#3c8362",
+    "buttonText": "#ffffff"
+  },
+  "light": {
+    "bg": "#f9fef9",
+    "panel": "#f7fef7",
+    "code": "#f3fdf3",
+    "ink": "#132a1c",
+    "muted": "#557b6b",
+    "line": "#cbf7cb",
+    "primary": "#318431",
+    "secondary": "#3b8060",
+    "highlight": "#637a56",
+    "accent": "#318431",
+    "buttonStart": "#338733",
+    "buttonEnd": "#3c8362",
+    "buttonText": "#ffffff"
+  }
+}

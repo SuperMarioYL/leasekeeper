@@ -1,0 +1,35 @@
+# Release artifacts for `leasekeeper`. goreleaser creates the GitHub release and
+# attaches the archives plus dist/checksums.txt, so release.yml has no separate
+# upload step.
+version: 2
+
+project_name: leasekeeper
+
+builds:
+  - id: leasekeeper
+    main: ./cmd/leasekeeper
+    binary: leasekeeper
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/SuperMarioYL/leasekeeper/internal/cli.Version={{ .Version }}
+
+archives:
+  - id: leasekeeper
+    formats: [tar.gz]
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+# The repo keeps its own CHANGELOG.md, and a release note generated from commit
+# subjects adds nothing a reader wants here.
+changelog:
+  disable: true

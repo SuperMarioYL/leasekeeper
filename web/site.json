@@ -1,0 +1,246 @@
+{
+  "schema": 3,
+  "name": "leasekeeper",
+  "meta": {
+    "visual_style": "neon-particle",
+    "demo_source": "docs/demo-results.json",
+    "content_version": "v0.1.0"
+  },
+  "github": "https://github.com/SuperMarioYL/leasekeeper",
+  "palette": "auto",
+  "lang": {
+    "primary": "en",
+    "toggle": true
+  },
+  "hero": {
+    "headline": {
+      "en": "The lease broker that stops parallel coding agents from deadlocking.",
+      "zh": "让并行 Coding Agent 不再互相死锁的租约仲裁器。"
+    },
+    "sub": {
+      "en": "Leasekeeper gives every agent a two-verb ownership API — acquire and release — over files, ports, GPUs and API quota. A wait-for graph refuses the circular wait before it locks up, so collisions are prevented instead of reconciled by hand.",
+      "zh": "Leasekeeper 为每个 Agent 提供两个动词的所有权接口 —— acquire 与 release —— 覆盖文件、端口、GPU 和 API 配额。等待图会在循环等待形成之前拒绝它，冲突被提前阻止，而不是事后手工收拾。"
+    },
+    "href": "#quickstart"
+  },
+  "advantages": [
+    {
+      "title": {
+        "en": "Prevented, not reconciled",
+        "zh": "提前阻止，而非事后收拾"
+      },
+      "body": {
+        "en": "A circular wait is refused at acquire time and printed as b -> a -> b, instead of two agents hanging until a human notices.",
+        "zh": "循环等待在 acquire 阶段就被拒绝，并打印成 b -> a -> b，而不是两个 Agent 一直卡住等人发现。"
+      }
+    },
+    {
+      "title": {
+        "en": "One binary, one broker per run",
+        "zh": "单个二进制，每次运行一个 broker"
+      },
+      "body": {
+        "en": "No daemon and no database. The broker lives in memory for the length of your run, and every lease drops when it stops.",
+        "zh": "没有守护进程，也没有数据库。broker 只在这次运行期间存在于内存里，退出时所有租约一并失效。"
+      }
+    },
+    {
+      "title": {
+        "en": "Queueing instead of racing",
+        "zh": "排队，而不是抢占"
+      },
+      "body": {
+        "en": "Waiting is first-in-first-out. The agent queued first is served first once the holder releases, so concurrency keeps working instead of failing.",
+        "zh": "等待严格先来先服务。持有者释放后，最早排队的 Agent 先拿到租约，并发度得以保持，而不是直接失败。"
+      }
+    }
+  ],
+  "demo": {
+    "title": {
+      "en": "The two-agent cycle, refused",
+      "zh": "两个 Agent 的循环等待，被拒绝"
+    },
+    "note": {
+      "en": "A real broker on a temporary socket plays the whole story in one process: no configuration and no second terminal.",
+      "zh": "一个真实的 broker 运行在临时 socket 上，在一个进程里演完整段故事：无需配置，也不需要第二个终端。"
+    },
+    "source": "https://github.com/SuperMarioYL/leasekeeper/blob/main/docs/demo-results.json",
+    "steps": [
+      {
+        "label": {
+          "en": "Recorded run",
+          "zh": "录制运行"
+        },
+        "body": {
+          "en": "One process, one broker on a temporary socket. Agent a takes the file, agent b takes the port, a's request for the port waits, and b's request for the file is refused because it would close b -> a -> b.",
+          "zh": "一个进程，一个运行在临时 socket 上的 broker。Agent a 拿到文件，Agent b 拿到端口，a 请求端口时进入等待，而 b 请求文件时被拒绝，因为它会闭合 b -> a -> b。"
+        },
+        "image": "/assets/presentation/demo-0-light.svg",
+        "imageDark": "/assets/presentation/demo-0-dark.svg",
+        "command": "leasekeeper demo",
+        "output": "Leasekeeper demo — two agents, one resource pair, one refused cycle\nbroker started on a temporary socket; no configuration needed\n\n  [a] acquire file:src/a.go\n     granted  granted file:src/a.go to a\n\n  [b] acquire port:8080\n     granted  granted port:8080 to b\n\n  [a] acquire port:8080   (blocks)\n     waiting  waiting for port:8080 held by b\n\n  [b] acquire file:src/a.go\n     acquire denied  acquire denied — would deadlock: b -> a -> b\n\nLeases\n  RESOURCE       OWNER  HELD  TTL\n  file:src/a.go  a      0s    -\n  port:8080      b      0s    -\n\nWait-for graph\n  a -> b\n\n  [b] release port:8080\n     released  released port:8080\n     granted  granted port:8080 to a after waiting\n\nLeases\n  none held\n\nWait-for graph\n  no agent is waiting on another\n\na held half the pair and b held the other half, so the second acquire was refused\ninstead of hanging. Nothing was preempted: the refusal failed fast, and once b\nreleased the port the queued waiter was served in order."
+      }
+    ]
+  },
+  "quickstart": {
+    "title": {
+      "en": "Try it locally",
+      "zh": "本地试用"
+    },
+    "body": {
+      "en": "Build the binary, then run the built-in demo. It starts a broker on a temporary socket, plays the two-agent cycle and refuses the second acquire.",
+      "zh": "先构建二进制，然后运行内置 demo。它会启动一个临时 socket 上的 broker，演一遍两个 Agent 的循环等待，并拒绝第二次 acquire。"
+    },
+    "steps": [
+      {
+        "title": {
+          "en": "Install",
+          "zh": "安装"
+        },
+        "code": "go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest"
+      },
+      {
+        "title": {
+          "en": "Run the demo",
+          "zh": "运行 demo"
+        },
+        "code": "leasekeeper demo"
+      },
+      {
+        "title": {
+          "en": "Two agents in two terminals",
+          "zh": "两个终端，两个 Agent"
+        },
+        "code": "leasekeeper run --name a -- ./examples/agent-a.sh\nleasekeeper run --name b -- ./examples/agent-b.sh"
+      }
+    ]
+  },
+  "limitations": [
+    {
+      "en": "The broker is one local process per run on one host: no distributed leases and no cross-machine coordination.",
+      "zh": "broker 是单机上每次运行一个本地进程：没有分布式租约，也没有跨机器协调。"
+    },
+    {
+      "en": "An agent has to call acquire and release itself, or run under `leasekeeper run`. Kernel-level interception is out of scope for v0.1.",
+      "zh": "Agent 必须自己调用 acquire 与 release，或者在 `leasekeeper run` 下运行。内核级拦截不在 v0.1 范围内。"
+    },
+    {
+      "en": "GPU and quota are named resources an agent leases by agreement; Leasekeeper does not fence a driver or enforce VRAM.",
+      "zh": "GPU 与配额是 Agent 通过约定租用的命名资源；Leasekeeper 不会在驱动层做隔离，也不强制显存配额。"
+    },
+    {
+      "en": "If the broker dies, every lease drops. That is deliberate: no agent can hold a stale lease forever.",
+      "zh": "broker 退出时所有租约失效。这是有意为之：任何 Agent 都无法永久持有一个过期租约。"
+    }
+  ],
+  "scene": {
+    "kind": "neon-graph",
+    "caption": {
+      "en": "Leases and a wait-for graph, in one local binary",
+      "zh": "租约与等待图，都在一个本地二进制里"
+    },
+    "fallback": "/assets/presentation/scene-dark.svg",
+    "fallbackLight": "/assets/presentation/scene-light.svg",
+    "nodes": [
+      "file:src/a.go",
+      "port:8080",
+      "gpu:0",
+      "quota:api"
+    ]
+  },
+  "story": {
+    "intro": {
+      "title": {
+        "en": "Two agents, one repository",
+        "zh": "两个 Agent，一个仓库"
+      },
+      "body": {
+        "en": "You start a refactor, a test run and a GPU job against the same checkout. Each one wants a file, a port or a slice of quota, and nothing forces any of them to hold exclusive ownership before it writes. The parallelism you paid for turns into interference.",
+        "zh": "你在同一个检出上同时跑重构、测试和 GPU 任务。它们各自要一个文件、一个端口或一份配额，而没有任何机制要求它们在写入之前先取得独占所有权。你为并行付出的代价，变成了互相干扰。"
+      }
+    },
+    "sections": [
+      {
+        "title": {
+          "en": "How it fits together",
+          "zh": "整体结构"
+        },
+        "body": {
+          "en": "One Go binary in three modes. `run` starts a broker and wraps your agent, `acquire` and `release` are the ownership API an agent calls, and `status` prints the table and the graph. The broker keeps the lease table and the wait-for graph in memory and serves both over a Unix socket.",
+          "zh": "一个 Go 二进制，三种模式。`run` 启动 broker 并包裹你的 Agent，`acquire` 与 `release` 是 Agent 调用的所有权接口，`status` 打印租约表与等待图。broker 在内存里维护租约表和等待图，并通过 Unix socket 对外服务。"
+        },
+        "image": {
+          "light": "/assets/presentation/architecture-light.svg",
+          "dark": "/assets/presentation/architecture-dark.svg",
+          "alt": "Leasekeeper's packages: the CLI, a Unix-socket client, the broker holding the lease table and the wait-for graph, and the lease and waitgraph primitives.",
+          "mobile": {
+            "light": "/assets/presentation/architecture-mobile-light.svg",
+            "dark": "/assets/presentation/architecture-mobile-dark.svg"
+          }
+        }
+      },
+      {
+        "title": {
+          "en": "What happens on one acquire",
+          "zh": "一次 acquire 发生了什么"
+        },
+        "body": {
+          "en": "The caller names the resource. The broker reads the lease table: if it is free the lease is granted and the owner recorded. If someone else holds it, the broker asks the wait-for graph whether making this agent wait would close a loop. It grants, queues or refuses — and a refusal names the cycle instead of blocking.",
+          "zh": "调用方声明资源名。broker 先查租约表：空闲就直接授予并记录持有者。若已被别人持有，broker 会问等待图：让这个 Agent 等待是否会闭合成环。结果是授予、排队或拒绝 —— 而拒绝会直接给出环，而不是继续阻塞。"
+        },
+        "image": {
+          "light": "/assets/presentation/process-light.svg",
+          "dark": "/assets/presentation/process-dark.svg",
+          "alt": "The acquire path: declare the resource, read the lease table, check the wait-for graph, then grant, queue or refuse with the cycle printed.",
+          "mobile": {
+            "light": "/assets/presentation/process-mobile-light.svg",
+            "dark": "/assets/presentation/process-mobile-dark.svg"
+          }
+        }
+      },
+      {
+        "title": {
+          "en": "What you can lease",
+          "zh": "可以租用什么"
+        },
+        "body": {
+          "en": "Four resource kinds ship in v0.1: file, port, gpu and quota. The kind is part of the name, so a file path can never collide with a port number. Agents reach the broker through the `leasekeeper run` wrapper, which puts the socket in the child's environment.",
+          "zh": "v0.1 内置四种资源类型：file、port、gpu、quota。类型是资源名的一部分，因此文件路径永远不会和端口号冲突。Agent 通过 `leasekeeper run` 包装器访问 broker，它会把这个 socket 放进子进程的环境变量。"
+        },
+        "image": {
+          "light": "/assets/presentation/integrations-light.svg",
+          "dark": "/assets/presentation/integrations-dark.svg",
+          "alt": "The four leaseable resource kinds — file, port, gpu and quota — connected to the run wrapper and the Unix socket.",
+          "mobile": {
+            "light": "/assets/presentation/integrations-mobile-light.svg",
+            "dark": "/assets/presentation/integrations-mobile-dark.svg"
+          }
+        }
+      }
+    ],
+    "details": [
+      {
+        "title": {
+          "en": "The refusal is the feature",
+          "zh": "拒绝本身就是功能"
+        },
+        "body": {
+          "en": "The second acquire fails fast with the cycle named, and exits non-zero so a script can branch on it.",
+          "zh": "第二次 acquire 会立即失败，并给出环的路径，同时以非零码退出，脚本可以据此分支。"
+        },
+        "code": "$ leasekeeper acquire file:src/a.go\nacquire denied  acquire denied — would deadlock: b -> a -> b"
+      },
+      {
+        "title": {
+          "en": "Leases are attributable",
+          "zh": "租约可追溯"
+        },
+        "body": {
+          "en": "Every lease names its owner, so `status` answers who holds what and who is waiting on whom.",
+          "zh": "每个租约都记录持有者，因此 `status` 能回答谁持有什么、谁在等谁。"
+        },
+        "code": "$ leasekeeper status\nLeases\n  RESOURCE       OWNER  HELD  TTL\n  file:src/a.go  a      3s    -\n  port:8080      b      2s    -"
+      }
+    ]
+  }
+}
