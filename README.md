@@ -37,15 +37,7 @@ That second part is the whole product. A per-action guard can authorise or hide 
 
 ## Quickstart
 
-Install the binary, then run the built-in demo. It needs no configuration and no second terminal: it starts a broker on a temporary socket and plays the two-agent cycle end to end.
-
-```bash
-go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest
-
-leasekeeper demo
-```
-
-The same story with two real agent processes in two terminals, using the example scripts shipped in this repo:
+Build from source. It needs only a Go toolchain — no configuration, and no second terminal for the demo.
 
 ```bash
 git clone https://github.com/SuperMarioYL/leasekeeper.git
@@ -53,6 +45,16 @@ cd leasekeeper
 go build -o leasekeeper ./cmd/leasekeeper
 export PATH="$PWD:$PATH"   # so the example scripts find the binary
 ```
+
+Then run the built-in demo. It starts a broker on a temporary socket and plays the two-agent cycle end to end:
+
+```bash
+leasekeeper demo
+```
+
+> **Not yet published.** The module is not on a public proxy and the repository is not public yet, so `go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest` will not resolve until the first tagged release is live. Build from source above until then.
+
+The same story with two real agent processes in two terminals, using the example scripts shipped in this repo:
 
 Terminal 1 — agent a takes `file:src/a.go`, then waits for `port:8080`:
 
