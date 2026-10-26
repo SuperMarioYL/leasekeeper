@@ -37,7 +37,7 @@ That second part is the whole product. A per-action guard can authorise or hide 
 
 ## Quickstart
 
-This repository is published at https://github.com/SuperMarioYL/leasekeeper as part of this release; before the first tagged release is live, the same commands work from a local checkout.
+This project's canonical repository is https://github.com/SuperMarioYL/leasekeeper. The commands below are written for that repository; until it is live, run them from a local checkout of this tree.
 
 Build from source. It needs only a Go toolchain — no configuration, and no second terminal for the demo.
 
