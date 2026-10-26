@@ -1,18 +1,18 @@
-# Demand validation — the m1 gate
+# Demand validation — the falsification gate
 
-`mvp_plan.md` puts a falsification gate in front of the product. This file is its
+The product plan puts a falsification gate in front of the product. This file is its
 record. It is written to be checkable, so it separates what can be cited today
 from what still needs a human.
 
 ## What the gate requires
 
-From `mvp_plan.md` §5, milestone `m1_validate_demand`:
+The plan's first milestone, the demand gate:
 
 > Weekend-1 falsification: cite 2+ real agent collision/circular-wait incidents
 > and run 5 developer interviews; `docs/validation.md` carries the go/no-go — no
 > product code until it passes
 
-and from §5, the pass condition:
+and its pass condition:
 
 > Fewer than 2 cited incidents, or fewer than 2 of 5 interviews reporting lost
 > work → kill, write no m2.
@@ -76,8 +76,8 @@ developers who report **lost work**, not developers who recognise the problem.
 ## Verdict today: NO-GO on the demand gate
 
 Both halves are unmet — 0 of 2 incidents, 0 of 5 interviews. Read strictly, the
-plan's pass condition is not satisfied, and its kill criteria say to write no
-m2.
+plan's pass condition is not satisfied, and its kill criteria say not to build
+the broker.
 
 That verdict is recorded rather than argued away, and it has a consequence worth
 stating plainly:
@@ -85,15 +85,14 @@ stating plainly:
 - **Nothing in this repo claims validated demand.** The README describes what
   the tool does and what it does not do. It does not claim that developers are
   losing work today, because that is exactly what the gate has not established.
-- **The launch activities in `m3_publish_deadlock_demo` are gated.** The plan's
-  §7 acquisition plan (Show HN, the subreddit threads, the X thread) must not run
-  until the incident count reaches 2 and at least 2 of 5 interviews report lost
-  work. The repo can be published as a working prototype; it cannot be launched
+- **The launch activities are gated.** The plan's acquisition plan (Show HN, the
+  subreddit threads, the X thread) must not run until the incident count reaches 2
+  and at least 2 of 5 interviews report lost work. The repo can be published as a working prototype; it cannot be launched
   as a validated need.
-- **The traction and absorption kill criteria still apply.** §8's 30-day gate
-  (fewer than 50 stars and no organic issue or PR → kill) and the absorption gate
-  (a mainstream harness ships per-resource leases plus deadlock detection → the
-  window is closed) are unchanged by this build.
+- **The traction and absorption kill criteria still apply.** The 30-day traction
+  gate (fewer than 50 stars and no organic issue or PR → kill) and the absorption
+  gate (a mainstream harness ships per-resource leases plus deadlock detection →
+  the window is closed) are unchanged by this build.
 
 ## Why a runnable prototype exists before the gate passed
 
@@ -104,8 +103,7 @@ on purpose, and the inversion is a risk, not a justification:
 - It makes the interview question answerable. "Have you lost work to a collision?"
   produces a shrug; `leasekeeper demo` in front of the developer produces a
   yes/no about their own setup in under a minute.
-- It costs the plan's own budget for m2 (`effort_hours: 26` covers m1–m3), not
-  new scope.
+- It stays inside the plan's own build budget rather than adding new scope.
 
 The risk is stated rather than hidden: a prototype invites building on an
 unvalidated premise. If the interviews come back with fewer than 2 of 5 reporting
@@ -122,4 +120,4 @@ file — not to look for a friendlier question.
    the time of the check.
 
 When those are recorded here, replace this verdict, update the README's roadmap
-section, and only then run the m3 launch plan.
+section, and only then run the launch plan.
