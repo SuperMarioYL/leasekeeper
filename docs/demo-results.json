@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "source_revision": "PENDING",
+  "source_revision": "56b970826ca134bd36cc46b3438cd5ebd31751c8",
   "scope": "The built-in demo: one real broker on a temporary Unix socket, driven over the real client protocol. No second terminal and no configuration. TTL expiry, the `run` wrapper and the two-terminal example are not exercised by this recording.",
   "steps": [
     {
