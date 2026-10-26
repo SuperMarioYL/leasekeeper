@@ -36,7 +36,7 @@ a_pid=$!
 tries=0
 while ! "$LEASEKEEPER" status 2>/dev/null | grep -q 'file:src/a.go'; do
 	tries=$((tries + 1))
-	if [ "$tries" -gt 100 ]; then
+	if [ "$tries" -gt 600 ]; then
 		echo "two-agents.sh: agent a never took the file" >&2
 		kill "$a_pid" 2>/dev/null || true
 		exit 1
@@ -49,5 +49,5 @@ done
 wait "$a_pid"
 
 echo
-echo "== both agents finished =="
-"$LEASEKEEPER" status 2>/dev/null || echo "the broker stopped with the last run, so no lease outlived its holder"
+echo "== after both agents exit =="
+"$LEASEKEEPER" status

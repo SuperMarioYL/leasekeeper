@@ -21,7 +21,7 @@ echo "a: holding file:src/a.go"
 tries=0
 while ! leasekeeper status | grep -q 'port:8080'; do
 	tries=$((tries + 1))
-	if [ "$tries" -gt 100 ]; then
+	if [ "$tries" -gt 600 ]; then
 		echo "a: b never took the port; giving up" >&2
 		exit 1
 	fi

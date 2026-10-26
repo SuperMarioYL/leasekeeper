@@ -21,7 +21,7 @@ echo "b: holding port:8080"
 tries=0
 while ! leasekeeper status | grep -q -- '->'; do
 	tries=$((tries + 1))
-	if [ "$tries" -gt 100 ]; then
+	if [ "$tries" -gt 600 ]; then
 		echo "b: a never started waiting for the port; giving up" >&2
 		exit 1
 	fi
