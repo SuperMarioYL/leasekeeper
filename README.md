@@ -37,6 +37,8 @@ That second part is the whole product. A per-action guard can authorise or hide 
 
 ## Quickstart
 
+This repository is published at https://github.com/SuperMarioYL/leasekeeper as part of this release; before the first tagged release is live, the same commands work from a local checkout.
+
 Build from source. It needs only a Go toolchain — no configuration, and no second terminal for the demo.
 
 ```bash
@@ -52,7 +54,7 @@ Then run the built-in demo. It starts a broker on a temporary socket and plays t
 leasekeeper demo
 ```
 
-> **Not yet published.** The module is not on a public proxy and the repository is not public yet, so `go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest` will not resolve until the first tagged release is live. Build from source above until then.
+> **Not yet published.** The module is not on a public proxy yet, so `go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest` will not resolve until the first tagged release is live. Build from source above until then.
 
 The same story with two real agent processes in two terminals, using the example scripts shipped in this repo:
 

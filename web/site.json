@@ -94,10 +94,10 @@
     "steps": [
       {
         "title": {
-          "en": "Install",
-          "zh": "安装"
+          "en": "Build from source",
+          "zh": "从源码构建"
         },
-        "code": "go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest"
+        "code": "git clone https://github.com/SuperMarioYL/leasekeeper.git\ncd leasekeeper\ngo build -o leasekeeper ./cmd/leasekeeper\nexport PATH=\"$PWD:$PATH\"   # so the example scripts find the binary"
       },
       {
         "title": {
@@ -112,6 +112,13 @@
           "zh": "两个终端，两个 Agent"
         },
         "code": "leasekeeper run --name a -- ./examples/agent-a.sh\nleasekeeper run --name b -- ./examples/agent-b.sh"
+      },
+      {
+        "title": {
+          "en": "Once the tagged release is live",
+          "zh": "带 tag 的 release 上线后"
+        },
+        "code": "go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest"
       }
     ]
   },

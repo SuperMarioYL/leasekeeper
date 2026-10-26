@@ -37,6 +37,8 @@ Leasekeeper 把所有权变成显式的，并让循环等待根本无法进入�
 
 ## 快速开始
 
+本仓库已随本次发布公开在 https://github.com/SuperMarioYL/leasekeeper；在第一个带 tag 的 release 上线之前，同样的命令在本地检出上即可运行。
+
 从源码构建。只需要一个 Go 工具链 —— 不需要任何配置，跑 demo 也不需要第二个终端。
 
 ```bash
@@ -52,7 +54,7 @@ export PATH="$PWD:$PATH"   # 让示例脚本找到这个二进制
 leasekeeper demo
 ```
 
-> **尚未发布。** 该模块还没有上公共代理，仓库也还没有公开，所以 `go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest` 在第一个带 tag 的 release 上线之前无法解析。在此之前请按上面的方式从源码构建。
+> **尚未发布。** 该模块还没有上公共代理，所以 `go install github.com/SuperMarioYL/leasekeeper/cmd/leasekeeper@latest` 在第一个带 tag 的 release 上线之前无法解析。在此之前请按上面的方式从源码构建。
 
 想用两个真实的 Agent 进程、在两个终端里跑同一个故事，就用仓库自带的示例脚本：
 
